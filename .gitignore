@@ -8,6 +8,7 @@
 
 # production
 /backend/dist
+/backend/futureIdeas
 
 # misc
 .DS_Store
