@@ -26,4 +26,5 @@ A software system meant to organize the development and bugfixing of projects.
         git clone https://github.com/ACrafter Bug-Tracker
 - Install Dependancies: <br>
 
-        cd Bug-Tracker npm install
+        cd Bug-Tracker 
+        npm install
