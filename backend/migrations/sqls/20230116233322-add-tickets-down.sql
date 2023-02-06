@@ -1,2 +1,2 @@
 DROP TABLE tickets;
-DROP TYPE tickets_status;
+DROP TYPE ticket_status_type;
