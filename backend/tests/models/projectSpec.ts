@@ -33,23 +33,23 @@ describe("User Model Tests", () => {
         })
 
         it("Create Method", async () => {
-            const res = await P.create({id: 1})
-            expect(res).toEqual({id: 1, user_rank: "Other", department: null})
+            const res = await P.create({id: 1, title: "test project", project_lang: "js", department: "TTD", rating: 4, last_mod_by: null})
+            expect(res).toEqual({id: 1, title: "test project", project_lang: "js", department: "TTD", rating: 4, last_mod_by: null})
         })
 
         it("Show Method", async () => {
             const res = await P.getOne("1")
-            expect(res).toEqual({id: 1, user_rank: "Other", department: null})
+            expect(res).toEqual({id: 1, title: "test project", project_lang: "js", department: "TTD", rating: 4, last_mod_by: null})
         })
 
         it("Update Method", async () => {
-            const res = await P.update("1", "user_rank", "Admin")
-            expect(res).toEqual({id: 1, user_rank: "Admin", department: null})
+            const res = await P.update("1", "rating", 6)
+            expect(res).toEqual({id: 1, title: "test project", project_lang: "js", department: "TTD", rating: 6, last_mod_by: null})
         })
 
         it("Delete Method", async () => {
             const res = await P.delete("1")
-            expect(res).toEqual({id: 1, user_rank: "Admin", department: null})
+            expect(res).toEqual({id: 1, title: "test project", project_lang: "js", department: "TTD", rating: 6, last_mod_by: null})
         })
     })
 })
