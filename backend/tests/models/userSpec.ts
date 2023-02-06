@@ -33,23 +33,23 @@ describe("User Model Tests", () => {
         })
 
         it("Create Method", async () => {
-            const res = await U.create({id: "1"})
-            expect(res).toEqual({id: "1", rank: "Other", department: null})
+            const res = await U.create({id: 1})
+            expect(res).toEqual({id: 1, user_rank: "Other", department: null})
         })
 
         it("Show Method", async () => {
             const res = await U.getOne("1")
-            expect(res).toEqual({id: "1", rank: "Other", department: null})
+            expect(res).toEqual({id: 1, user_rank: "Other", department: null})
         })
 
         it("Update Method", async () => {
-            const res = await U.update("1", "rank", "Admin")
-            expect(res).toEqual({id: "1", rank: "Admin", department: null})
+            const res = await U.update("1", "user_rank", "Admin")
+            expect(res).toEqual({id: 1, user_rank: "Admin", department: null})
         })
 
         it("Delete Method", async () => {
             const res = await U.delete("1")
-            expect(res).toEqual({id: "1", rank: "Admin", department: null})
+            expect(res).toEqual({id: 1, user_rank: "Admin", department: null})
         })
     })
 })

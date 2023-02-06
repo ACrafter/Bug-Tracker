@@ -10,8 +10,8 @@ dotenv.config();
 
 // User Interface
 export interface User {
-    id: String,
-    rank?: String,
+    id: Number,
+    user_rank?: String,
     department?: String | null
 }
 
@@ -36,7 +36,7 @@ export class UserStore {
           const sql = "SELECT * FROM users WHERE id=$1"; // Defining the SQL query
           const result = await connection.query(sql, [id]); // Running the SQL query on the DB & storing the result
           connection.release(); // Closing the connection
-          return result.rows; // Returning the result
+          return result.rows[0]; // Returning the result
         } catch (err) {
           throw new Error(`Couldn't retrive user whose id=${id} => ${err}`);
         }
@@ -45,10 +45,10 @@ export class UserStore {
       async create(userInfo: User): Promise<User> {
         try {
           const connection = await Client.connect(); // Opening the connection
-          const sql = "INSERT INTO users (id) VALUES $1 RETURNING *"; // Defining the SQL query
+          const sql = "INSERT INTO users (id) VALUES ($1) RETURNING *"; // Defining the SQL query
           const result = await connection.query(sql, [userInfo.id]); // Running the SQL query on the DB & storing the result
           connection.release(); // Closing the connection
-          return result.rows; // Returning the result
+          return result.rows[0]; // Returning the result
         } catch (err) {
           throw new Error(`Couldn't create default user with id=${userInfo.id} => ${err}`);
         }
@@ -60,7 +60,7 @@ export class UserStore {
           const sql = "UPDATE users SET " + modify + "=$2 WHERE id=$1 RETURNING *"; // Defining the SQL query
           const result = await connection.query(sql, [id, value]); // Running the SQL query on the DB & storing the result
           connection.release(); // Closing the connection
-          return result.rows; // Returning the result
+          return result.rows[0]; // Returning the result
         } catch (err) {
           throw new Error(`Couldn't update user with id=${id} => ${err}`);
         }
@@ -72,7 +72,7 @@ export class UserStore {
           const sql = "DELETE FROM users WHERE id=$1 RETURNING *"; // Defining the SQL query
           const result = await connection.query(sql, [id]); // Running the SQL query on the DB & storing the result
           connection.release(); // Closing the connection
-          return result.rows; // Returning the result
+          return result.rows[0]; // Returning the result
         } catch (err) {
           throw new Error(`Couldn't delete user whose id=${id} => ${err}`);
         }
