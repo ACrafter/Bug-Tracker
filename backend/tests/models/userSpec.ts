@@ -27,29 +27,31 @@ describe("User Model Tests", () => {
     })
 
     describe("CRUD Methods Functionality", () => {
+        let userId: Number;
         it("Index Method", async () => {
             const res = await U.index()
             expect(res).toEqual([])
         })
 
         it("Create Method", async () => {
-            const res = await U.create({id: 1})
-            expect(res).toEqual({id: 1, user_rank: "Other", department: null})
+            const res = await U.create({username: "A", user_password:"1234", user_email:"a@b"})
+            userId = res.id as Number;
+            expect(res).toEqual({id: userId, username: "A", user_password:"1234", user_email:"a@b", user_rank: "Other", department: null})
         })
 
         it("Show Method", async () => {
-            const res = await U.getOne("1")
-            expect(res).toEqual({id: 1, user_rank: "Other", department: null})
+            const res = await U.getOne(userId)
+            expect(res).toEqual({id: userId, username: "A", user_password:"1234", user_email:"a@b", user_rank: "Other", department: null})
         })
 
         it("Update Method", async () => {
-            const res = await U.update("1", "user_rank", "Admin")
-            expect(res).toEqual({id: 1, user_rank: "Admin", department: null})
+            const res = await U.update(userId, "user_rank", "Admin")
+            expect(res).toEqual({id: userId, username: "A", user_password:"1234", user_email:"a@b", user_rank: "Other", department: null})
         })
 
         it("Delete Method", async () => {
-            const res = await U.delete("1")
-            expect(res).toEqual({id: 1, user_rank: "Admin", department: null})
+            const res = await U.delete(userId)
+            expect(res).toEqual({id: userId, username: "A", user_password:"1234", user_email:"a@b", user_rank: "Other", department: null})
         })
     })
 })
