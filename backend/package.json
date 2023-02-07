@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
-    "test": "npm run build && jasmine"
+    "test": "db-migrate reset --e test && db-migrate up --e test && npm run build && jasmine",
+    "eslint": "eslint src",
+    "prettier": "npx prettier --write src",
+    "lint": "npm run eslint && npm run prettier"
   },
   "keywords": [],
   "author": "",
