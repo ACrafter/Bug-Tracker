@@ -2,15 +2,18 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import Client from "../database";
 import dotenv from "dotenv";
-// import bcryptjs from "bcryptjs";
+import bcryptjs from "bcryptjs";
 
 dotenv.config();
-// const pepper = String(process.env.SECRET);
-// const salt = Number(process.env.SALT_ROUNDS);
+const pepper = String(process.env.SECRET);
+const salt = Number(process.env.SALT_ROUNDS);
 
 // User Interface
 export interface User {
-    id: Number,
+    id?: Number,
+    username: String,
+    user_password: String,
+    user_email: String,
     user_rank?: String,
     department?: String | null
 }
@@ -30,7 +33,7 @@ export class UserStore {
         }
       }
 
-      async getOne(id: String): Promise<User> {
+      async getOne(id: Number): Promise<User> {
         try {
           const connection = await Client.connect(); // Opening the connection
           const sql = "SELECT * FROM users WHERE id=$1"; // Defining the SQL query
@@ -44,17 +47,18 @@ export class UserStore {
 
       async create(userInfo: User): Promise<User> {
         try {
+          const newPassword = bcryptjs.hashSync(`${userInfo.user_password}${pepper}`, salt)
           const connection = await Client.connect(); // Opening the connection
-          const sql = "INSERT INTO users (id) VALUES ($1) RETURNING *"; // Defining the SQL query
-          const result = await connection.query(sql, [userInfo.id]); // Running the SQL query on the DB & storing the result
+          const sql = "INSERT INTO users (username, user_password, user_email) VALUES ($1, $2, $3) RETURNING *"; // Defining the SQL query
+          const result = await connection.query(sql, [userInfo.username, newPassword, userInfo.user_email]); // Running the SQL query on the DB & storing the result
           connection.release(); // Closing the connection
           return result.rows[0]; // Returning the result
         } catch (err) {
-          throw new Error(`Couldn't create default user with id=${userInfo.id} => ${err}`);
+          throw new Error(`Couldn't create default user with username=${userInfo.username} => ${err}`);
         }
       }
 
-      async update(id:String, modify: String, value: String): Promise<User> {
+      async update(id:Number, modify: String, value: String): Promise<User> {
         try {
           const connection = await Client.connect(); // Opening the connection
           const sql = "UPDATE users SET " + modify + "=$2 WHERE id=$1 RETURNING *"; // Defining the SQL query
@@ -66,7 +70,7 @@ export class UserStore {
         }
       }
 
-      async delete(id: String): Promise<User> {
+      async delete(id: Number): Promise<User> {
         try {
           const connection = await Client.connect(); // Opening the connection
           const sql = "DELETE FROM users WHERE id=$1 RETURNING *"; // Defining the SQL query
