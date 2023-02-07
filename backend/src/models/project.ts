@@ -6,6 +6,7 @@ export interface Project{
     id:Number,
     title: String,
     project_lang: String,
+    project_desc: String,
     department: String,
     rating: Number,
     last_mod_by: Number | null
@@ -39,8 +40,8 @@ export class ProjectStore {
       async create(projectInfo: Project): Promise<Project> {
         try {
           const connection = await Client.connect(); // Opening the connection
-          const sql = "INSERT INTO projects (id, title, project_lang, department, rating, last_mod_by) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *"; // Defining the SQL query
-          const result = await connection.query(sql, [projectInfo.id, projectInfo.title, projectInfo.project_lang, projectInfo.department, projectInfo.rating, projectInfo.last_mod_by]); // Running the SQL query on the DB & storing the result
+          const sql = "INSERT INTO projects (id, title, project_lang, project_desc ,department, rating, last_mod_by) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *"; // Defining the SQL query
+          const result = await connection.query(sql, [projectInfo.id, projectInfo.title, projectInfo.project_lang, projectInfo.project_desc,projectInfo.department, projectInfo.rating, projectInfo.last_mod_by]); // Running the SQL query on the DB & storing the result
           connection.release(); // Closing the connection
           return result.rows[0]; // Returning the result
         } catch (err) {
