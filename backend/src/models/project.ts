@@ -3,7 +3,7 @@
 import Client from "../database";
 
 export interface Project{
-    id:Number,
+    id?:Number,
     title: String,
     project_lang: String,
     project_desc: String,
@@ -25,7 +25,7 @@ export class ProjectStore {
         }
       }
 
-      async getOne(id: String): Promise<Project> {
+      async getOne(id: Number): Promise<Project> {
         try {
           const connection = await Client.connect(); // Opening the connection
           const sql = "SELECT * FROM projects WHERE id=$1"; // Defining the SQL query
@@ -40,8 +40,8 @@ export class ProjectStore {
       async create(projectInfo: Project): Promise<Project> {
         try {
           const connection = await Client.connect(); // Opening the connection
-          const sql = "INSERT INTO projects (id, title, project_lang, project_desc ,department, rating, last_mod_by) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *"; // Defining the SQL query
-          const result = await connection.query(sql, [projectInfo.id, projectInfo.title, projectInfo.project_lang, projectInfo.project_desc,projectInfo.department, projectInfo.rating, projectInfo.last_mod_by]); // Running the SQL query on the DB & storing the result
+          const sql = "INSERT INTO projects (title, project_lang, project_desc ,department, rating, last_mod_by) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *"; // Defining the SQL query
+          const result = await connection.query(sql, [projectInfo.title, projectInfo.project_lang, projectInfo.project_desc,projectInfo.department, projectInfo.rating, projectInfo.last_mod_by]); // Running the SQL query on the DB & storing the result
           connection.release(); // Closing the connection
           return result.rows[0]; // Returning the result
         } catch (err) {
@@ -49,7 +49,7 @@ export class ProjectStore {
         }
       }
 
-      async update(id:String, modify: String, value: String | Number): Promise<Project> {
+      async update(id:Number, modify: String, value: String | Number): Promise<Project> {
         try {
           const connection = await Client.connect(); // Opening the connection
           const sql = "UPDATE projects SET " + modify + "=$2 WHERE id=$1 RETURNING *"; // Defining the SQL query
@@ -61,7 +61,7 @@ export class ProjectStore {
         }
       }
 
-      async delete(id: String): Promise<Project> {
+      async delete(id: Number): Promise<Project> {
         try {
           const connection = await Client.connect(); // Opening the connection
           const sql = "DELETE FROM projects WHERE id=$1 RETURNING *"; // Defining the SQL query
