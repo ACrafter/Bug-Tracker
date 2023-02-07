@@ -28,6 +28,7 @@ describe("User Model Tests", () => {
 
     describe("CRUD Methods Functionality", () => {
         let userId: Number;
+        let userPass: String;
         it("Index Method", async () => {
             const res = await U.index()
             expect(res).toEqual([])
@@ -36,22 +37,23 @@ describe("User Model Tests", () => {
         it("Create Method", async () => {
             const res = await U.create({username: "A", user_password:"1234", user_email:"a@b"})
             userId = res.id as Number;
-            expect(res).toEqual({id: userId, username: "A", user_password:"1234", user_email:"a@b", user_rank: "Other", department: null})
+            userPass = res.user_password;
+            expect(res).toEqual({id: userId, username: "A", user_password:userPass, user_email:"a@b", user_rank: "Other", department: null})
         })
 
         it("Show Method", async () => {
             const res = await U.getOne(userId)
-            expect(res).toEqual({id: userId, username: "A", user_password:"1234", user_email:"a@b", user_rank: "Other", department: null})
+            expect(res).toEqual({id: userId, username: "A", user_password:userPass, user_email:"a@b", user_rank: "Other", department: null})
         })
 
         it("Update Method", async () => {
             const res = await U.update(userId, "user_rank", "Admin")
-            expect(res).toEqual({id: userId, username: "A", user_password:"1234", user_email:"a@b", user_rank: "Other", department: null})
+            expect(res).toEqual({id: userId, username: "A", user_password:userPass, user_email:"a@b", user_rank: "Admin", department: null})
         })
 
         it("Delete Method", async () => {
             const res = await U.delete(userId)
-            expect(res).toEqual({id: userId, username: "A", user_password:"1234", user_email:"a@b", user_rank: "Other", department: null})
+            expect(res).toEqual({id: userId, username: "A", user_password:userPass, user_email:"a@b", user_rank: "Admin", department: null})
         })
     })
 })
