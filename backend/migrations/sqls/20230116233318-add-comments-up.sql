@@ -2,7 +2,7 @@ CREATE TABLE comments(
     id SERIAL PRIMARY KEY NOT NULL,
     userid INT REFERENCES users(id) NOT NULL,
     comment_date DATE NOT NULL,
-    content TEXT,
+    content TEXT NOT NULL,
     likes INT,
     projectid INT REFERENCES projects(id),
     ticketid INT REFERENCES tickets(id),
