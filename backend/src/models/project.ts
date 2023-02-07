@@ -45,7 +45,7 @@ export class ProjectStore {
           connection.release(); // Closing the connection
           return result.rows[0]; // Returning the result
         } catch (err) {
-          throw new Error(`Couldn't create project with id=${projectInfo.id} => ${err}`);
+          throw new Error(`Couldn't create project with title=${projectInfo.title} => ${err}`);
         }
       }
 
