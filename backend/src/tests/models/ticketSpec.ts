@@ -1,5 +1,5 @@
-import { ProjectStore } from "../../src/models/project";
-import { TicketStore } from "../../src/models/ticket";
+import { ProjectStore } from "../../models/project";
+import { TicketStore } from "../../models/ticket";
 
 
 describe("Ticket Model Tests", () => {
@@ -34,7 +34,7 @@ describe("Ticket Model Tests", () => {
 
         beforeAll(async () => {
             const P = new ProjectStore()
-            const project = await P.create({title: "test project", project_lang: "js", project_desc:"Projectdesc",department: "TTD", rating: 4, last_mod_by: null})
+            const project = await P.create({title: "ticket test project", project_lang: "js", project_desc:"Projectdesc",department: "TTD", rating: 4, last_mod_by: null})
             projectId = project.id as Number
         })
 
@@ -42,6 +42,7 @@ describe("Ticket Model Tests", () => {
             const P = new ProjectStore()
             await P.delete(projectId)
         })
+
         it("Index Method", async () => {
             const res = await P.index()
             expect(res).toEqual([])

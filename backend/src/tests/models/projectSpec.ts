@@ -1,4 +1,4 @@
-import { ProjectStore } from './../../src/models/project';
+import { ProjectStore } from "../../models/project";
 
 describe("Project Model Tests", () => {
     const P = new ProjectStore();

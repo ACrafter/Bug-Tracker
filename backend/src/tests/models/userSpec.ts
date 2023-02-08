@@ -1,4 +1,4 @@
-import { UserStore } from "../../src/models/users"
+import { UserStore } from "../../models/users"
 
 describe("User Model Tests", () => {
     const U = new UserStore();
