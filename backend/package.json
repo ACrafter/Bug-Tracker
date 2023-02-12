@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "server": "nodemon src/index.ts",
     "build": "npx tsc",
     "test": "cross-env ENV=test \"db-migrate reset --e test && db-migrate up --e test && npm run build && jasmine",
     "eslint": "eslint src",
