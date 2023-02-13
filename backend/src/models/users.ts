@@ -91,6 +91,21 @@ export class UserStore {
       throw new Error(`Couldn't delete user whose id=${id} => ${err}`);
     }
   }
+
+  // Special Model Operations
+  async authenticate(username: String, password: String): Promise<undefined | User> {
+      const connection = await Client.connect();
+      const sql = "SELECT * FROM users WHERE username=($1)";
+      const result = await connection.query(sql, [username]);
+      const rows = result.rows
+      for (const user in rows) {
+        if (rows[user].username === username){
+          if(bcryptjs.compareSync(`${password}${pepper}`, rows[user].user_password)){
+            return rows[user]
+          }
+        }
+      }
+  }
 }
 
 // Special Model Operations
