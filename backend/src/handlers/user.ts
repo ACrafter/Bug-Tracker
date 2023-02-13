@@ -1,3 +1,4 @@
+import { User } from './../models/users';
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import Express from "express";
@@ -39,8 +40,8 @@ const create = async (
   try {
     const newUser = await store.create({
       username: req.body.username,
-      user_password: req.body.user_password,
-      user_email: req.body.user_email,
+      user_password: req.body.password,
+      user_email: req.body.email,
     });
     res.json(newUser.id);
   } catch (err) {
@@ -79,9 +80,29 @@ const del = async (
   }
 };
 
+const login =async (
+  req: Express.Request,
+  res: Express.Response
+): Promise<void> => {
+  try {
+    const username:String = req.body.username
+    const pass:String = req.body.password
+    const user:(User | undefined) = await store.authenticate(username, pass)
+    if(user != null){  
+    res.send(user);
+    } else {
+      res.send("Wrong Username or Password")
+    }
+  } catch (err) {
+    res.status(203);
+    res.send(`Error, Couldn't Login: ${err}`);
+  }
+}
+
 const userRoutes = async (app: Express.Application): Promise<void> => {
   app.get("/users", index);
   app.post("/users", create);
+  app.post("/login", login);
   app.get("/users/:id", getOne);
   app.patch("/users/:id", update);
   app.delete("/users/:id", del);
