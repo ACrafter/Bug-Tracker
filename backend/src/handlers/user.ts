@@ -1,10 +1,13 @@
-import { User } from './../models/users';
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import Express from "express";
-import { UserStore } from "../models/users";
+import { User, UserStore } from "../models/users";
+import {sign} from 'jsonwebtoken';
+import dotenv from "dotenv";
+import Auth from "../middleware/Authorization";
 
 const store = new UserStore();
+dotenv.config();
 
 const index = async (
   req: Express.Request,
@@ -43,7 +46,12 @@ const create = async (
       user_password: req.body.password,
       user_email: req.body.email,
     });
-    res.json(newUser.id);
+
+    
+    const token = sign(String(newUser.id), String(process.env.TOKEN));
+    res.send(token);
+
+
   } catch (err) {
     res.status(203);
     res.send(`Error, Couldn't Create User: ${err}`);
@@ -89,7 +97,8 @@ const login =async (
     const pass:String = req.body.password
     const user:(User | undefined) = await store.authenticate(username, pass)
     if(user != null){  
-    res.send(user);
+      const token = sign(String(user.id), String(process.env.TOKEN));
+      res.send(token);
     } else {
       res.send("Wrong Username or Password")
     }
@@ -100,12 +109,12 @@ const login =async (
 }
 
 const userRoutes = async (app: Express.Application): Promise<void> => {
-  app.get("/users", index);
+  app.get("/users", Auth, index);
   app.post("/users", create);
   app.post("/login", login);
   app.get("/users/:id", getOne);
-  app.patch("/users/:id", update);
-  app.delete("/users/:id", del);
+  app.patch("/users/:id", Auth, update);
+  app.delete("/users/:id", Auth, del);
 };
 
 export default userRoutes;
