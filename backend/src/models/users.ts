@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import Client from "../database";
@@ -105,6 +106,17 @@ export class UserStore {
           }
         }
       }
+  }
+
+  async isAdmin(id: Number): Promise<Boolean> {
+    const connection = await Client.connect();
+    const sql = "SELECT * FROM users WHERE id=($1) AND user_rank='Admin'";
+    const result = await connection.query(sql, [id]);
+    if(result.rows[0]){
+      return true
+    } else {
+      return false
+    }    
   }
 }
 
