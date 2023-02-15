@@ -118,6 +118,27 @@ export class UserStore {
       return false
     }    
   }
+
+  async isLead(id: Number): Promise<Boolean> {
+    const connection = await Client.connect();
+    const sql = "SELECT * FROM users WHERE id=($1) AND user_rank='Lead'";
+    const result = await connection.query(sql, [id]);
+    if(result.rows[0]){
+      return true
+    } else {
+      return false
+    }    
+  }
+
+  async isDev(id: Number): Promise<Boolean> {
+    const connection = await Client.connect();
+    const sql = "SELECT * FROM users WHERE id=($1) AND user_rank='Dev'";
+    const result = await connection.query(sql, [id]);
+    if(result.rows[0]){
+      return true
+    } else {
+      return false
+    }    
+  }
 }
 
-// Special Model Operations
