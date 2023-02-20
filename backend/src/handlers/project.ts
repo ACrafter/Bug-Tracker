@@ -1,3 +1,4 @@
+import { DevAuth, LeadAuth } from './../middleware/Authorization';
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import Express from "express";
@@ -37,7 +38,7 @@ const create = async (
   res: Express.Response
 ): Promise<void> => {
   try {
-    const newUser = await store.create({
+    const newProject = await store.create({
       title: req.body.title,
       project_lang: req.body.language,
       project_desc: req.body.description,
@@ -45,7 +46,7 @@ const create = async (
       rating: 0,
       last_mod_by: null,
     });
-    res.json(newUser.id);
+    res.json(newProject.id);
   } catch (err) {
     res.status(203);
     res.send(`Error, Couldn't Create Project: ${err}`);
@@ -84,10 +85,10 @@ const del = async (
 
 const projectRoutes = async (app: Express.Application): Promise<void> => {
   app.get("/projects", index);
-  app.post("/projects", create);
+  app.post("/projects", LeadAuth, create);
   app.get("/projects/:id", getOne);
-  app.patch("/projects/:id", update);
-  app.delete("/projects/:id", del);
+  app.patch("/projects/:id", DevAuth, update);
+  app.delete("/projects/:id", LeadAuth,del);
 };
 
 export default projectRoutes;
