@@ -89,6 +89,7 @@ describe("Admin Account", () => {
         
         token = sign(String(user.id), String(process.env.TOKEN))
         uid = user.id as Number;
+        await U.update(uid, 'user_rank', 'Admin')
     })
 
     afterAll(async () => {
@@ -97,7 +98,6 @@ describe("Admin Account", () => {
     })
 
     it("Index Route",async () => {
-       await request.patch(`/users/${uid.toString()}`).set({authorization: token}).send({prop:"user_rank", value:"Admin"})
        const res = await request.get('/users').set({authorization: token})
        expect(res.status).toBe(200)
     })
