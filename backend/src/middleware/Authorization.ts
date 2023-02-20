@@ -67,10 +67,10 @@ export const DevAuth =async (
       const isAdmin = await U.isAdmin(Number(userId))
       const isDev = await U.isDev(Number(userId))
       
-  
       if(isAdmin !== false) {
         next();
       } else if (isDev !== false){
+        console.log(isAdmin, isDev);
         next()
       } else {
         res.status(403);
