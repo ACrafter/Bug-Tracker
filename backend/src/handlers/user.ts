@@ -4,10 +4,12 @@ import Express from "express";
 import { User, UserStore } from "../models/users";
 import {sign} from 'jsonwebtoken';
 import dotenv from "dotenv";
-import Auth from "../middleware/Authorization";
+import {userAuth} from "../middleware/Authorization";
 
 const store = new UserStore();
 dotenv.config();
+
+const mutables = ["username", "user_password"]
 
 const index = async (
   req: Express.Request,
@@ -63,12 +65,16 @@ const update = async (
   res: Express.Response
 ): Promise<void> => {
   try {
-    const modify: String = req.body.prop;
-    const newValue: String = req.body.value;
-    const id: Number = Number(req.params.id);
-
+    const modify: string = req.body.prop;
+    const newValue: string = req.body.value;
+    const id: number = Number(req.params.id);
+    if (mutables.includes(modify)){
     const result = await store.update(id, modify, newValue);
     res.json(result);
+    } else {
+      res.status(403);
+      res.send("Can't Change That!")
+    }
   } catch (err) {
     res.status(203);
     res.send(`Error, Couldn't Update User: ${err}`);
@@ -109,12 +115,12 @@ const login =async (
 }
 
 const userRoutes = async (app: Express.Application): Promise<void> => {
-  app.get("/users", Auth, index);
+  app.get("/users", userAuth, index);
   app.post("/users", create);
   app.post("/login", login);
   app.get("/users/:id", getOne);
-  app.patch("/users/:id", Auth, update);
-  app.delete("/users/:id", Auth, del);
+  app.patch("/users/:id", userAuth, update);
+  app.delete("/users/:id", userAuth, del);
 };
 
 export default userRoutes;
